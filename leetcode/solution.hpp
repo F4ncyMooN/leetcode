@@ -12,6 +12,9 @@
 #include <stdio.h>
 #include <vector>
 #include <queue>
+#include <string>
+#include <stdlib.h>
+#include <algorithm>
 using namespace std;
 
 class solution{
@@ -149,6 +152,67 @@ public:
             list.push_back(major2);
         }
         return list;
+    }
+    
+    //leet60
+    struct node{
+        int number;
+        struct node * next;
+    };
+    string getPermutation(int n, int k){
+        string ret;
+        int array[10]={0};
+        array[0]=1;
+        
+        for(int i=1;i<n;i++){
+            array[i]=array[i-1]*(i+1);
+        }
+        node *head = (node *)(malloc(sizeof(node)));
+        node *p;
+        for(int i=n;i>=1;i--){
+            node * now = head->next;
+            p = (node *)(malloc(sizeof(node)));
+            p->number = i;
+            p->next = now;
+            head->next = p;
+        }
+        for(int i=n-2;i>=0;i--){
+            int mod = (k-1)/array[i];
+            node *prev;
+            prev = head;
+            for(int j = 0;j<mod;j++){
+                prev = prev->next;
+            }
+            p = prev->next;
+            ret += p->number+'0';
+            //free p
+            prev->next = p->next;
+            free(p);
+            
+            k -= mod * array[i];
+        }
+        ret += head->next->number+'0';
+        free(head->next);
+        free(head);
+        
+        return ret;
+    }
+    //leet274,275
+    int hIndex(vector<int>& citations) {
+        //O(n)，降序时取i+1 <= citations[i]的最大值 h=i+1
+        sort(citations.begin(),citations.end(),[](int a,int b){return a>b;});
+        int h=0;
+        for(int i=0;i<citations.size();i++){
+            if(i+1 <= citations[i]){
+                h = i+1;
+            }else{
+                break;
+            }
+        }
+        return h;
+        //O(logn)，升序时取N-i>=citations[i]的最小值 h=i
+        
+        
     }
     
 
