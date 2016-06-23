@@ -198,21 +198,45 @@ public:
         return ret;
     }
     //leet274,275
+    template<class ForwardIt, class T, class Compare>
+    ForwardIt my_upper_bound(ForwardIt first, ForwardIt last, const T& value,Compare comp)
+    {
+        ForwardIt it;
+        typename std::iterator_traits<ForwardIt>::difference_type count, step;
+        count = std::distance(first,last);
+        
+        while (count > 0) {
+            it = first;
+            step = count / 2;
+            std::advance(it, step);
+            if (!comp(value , it)) {
+                first = ++it;
+                count -= step + 1;
+            } else count = step;
+        }
+        return first;
+    }
     int hIndex(vector<int>& citations) {
         //O(n)，降序时取i+1 <= citations[i]的最大值 h=i+1
-        sort(citations.begin(),citations.end(),[](int a,int b){return a>b;});
-        int h=0;
-        for(int i=0;i<citations.size();i++){
-            if(i+1 <= citations[i]){
-                h = i+1;
-            }else{
-                break;
-            }
-        }
-        return h;
-        //O(logn)，升序时取N-i>=citations[i]的最小值 h=i
-        
-        
+//        sort(citations.begin(),citations.end(),[](int a,int b){return a>b;});
+//        int h=0;
+//        for(int i=0;i<citations.size();i++){
+//            if(i+1 <= citations[i]){
+//                h = i+1;
+//            }else{
+//                break;
+//            }
+//        }
+//        return h;
+        //O(logn)，升序时取N-i>=citations[i]的最大值 h=N-i
+        sort(citations.begin(),citations.end(),[](int a,int b){return a<b;});
+
+        int h=(int)citations.size();
+        vector<int>::iterator iter = my_upper_bound(citations.begin(), citations.end(), h, [&h,&citations](int value,vector<int>::iterator it){
+            int h = (it-citations.begin());
+            return *it >= citations.size()-(it-citations.begin());
+        });
+        return (int)(citations.size()-(iter-citations.begin()));
     }
     
 
