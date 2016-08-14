@@ -15,11 +15,50 @@
 #include <string>
 #include <stdlib.h>
 #include <algorithm>
+#include <sstream>
 #include <map>
 using namespace std;
 
 class solution{
 public:
+    //leet 228
+    vector<string> summaryRanges(vector<int>& nums) {
+        stringstream ss;
+        vector<string> ranges;
+        int start = INT_MIN,end = 0;
+        int now;
+        if(nums.empty())
+            return ranges;
+        for(auto iter = nums.begin();iter!=nums.end();iter++){
+            now = *iter;
+            if(iter == nums.begin()){
+                start = *iter;
+                end = *iter;
+            }else{
+                if(now == end+1){
+                    end = *iter;
+                }else{
+                //find sub range.
+                    ss.str("");
+                    ss<<start;
+                    if(start != end){
+                        ss<<"->"<<end;
+                    }
+                    ranges.push_back(ss.str());
+                    start = now;
+                    end = now;
+                }
+            }
+        }
+        ss.str("");
+        ss<<start;
+        if(start != end){
+            ss<<"->"<<end;
+        }
+        ranges.push_back(ss.str());
+        
+        return ranges;
+    }
     //leet69
     int mySqrt(int x) {
         if(x == 1 || x == 0)

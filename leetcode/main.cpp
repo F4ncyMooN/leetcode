@@ -15,11 +15,15 @@ using namespace std;
 
 int main(void)
 {
+    vector<int> numbers;
     solution s;
+    numbers  = {0,1,2,4,5,7};
+    s.summaryRanges(numbers);
+    
     cout << s.minWindow("ab", "b")<<endl;
 
     cout<<s.mySqrt(2147395600)<<endl;
-    vector<int> numbers;
+
     for(int i=0;i<10;i++){
         numbers.push_back(i);
     }
