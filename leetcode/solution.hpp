@@ -15,10 +15,107 @@
 #include <string>
 #include <stdlib.h>
 #include <algorithm>
+#include <map>
 using namespace std;
 
 class solution{
 public:
+    //leet69
+    int mySqrt(int x) {
+        if(x == 1 || x == 0)
+            return x;
+        int upper = 46340;
+        int lower = 0;
+        int now = 0;
+        int mult = 0;
+        while(upper>lower){
+            if(upper == lower+1)
+                return upper*upper<=x?upper:lower;
+            now = (lower+upper)/2;
+            mult = now*now;
+            if(mult > x){
+                upper = now;
+            }else if(mult == x){
+                return now;
+            }
+            else{
+                lower = now;
+            }
+        }
+        return now;
+    }
+    
+    //leet 76
+    bool inline canShrink(const char c,const map<char,int>& target){
+        if(target.find(c) == target.end()){
+            return true;
+        }else{
+            if(target.at(c) < 0){
+                return true;
+            }else{
+                return false;
+            }
+        }
+        return true;
+    }
+    string minWindow(string s, string t) {
+        int minSize = INT_MAX;
+        string minString = "";
+        int start = 0,end = 0;
+        int validNum = 0;
+        map<char,int> target;
+        for(auto iter = t.begin();iter!=t.end();iter++){
+            target[*iter]++;
+            validNum++;
+        }
+        //find first valid min Sequence.
+        for(int i = 0;validNum != 0 && i < s.size();i++){
+            if(target.find(s[i]) != target.end()){
+                if(target.at(s[i]) > 0)
+                    validNum--;
+                target[s[i]]--;
+            }
+            end++;
+        }
+        if(validNum > 0)
+            return "";
+        for(int i=0;true;i++){
+            if(!canShrink(s[i], target)){
+                break;
+            }else{
+                target.find(s[i]) == target.end()?i:target.at(s[i])++;
+                start++;
+            }
+        }
+        
+        minSize = end-start;
+        minString = s.substr(start,minSize);
+        
+        
+        int size = 0;
+        //keep valid and record all possible Sequence.
+        //be careful when end reach the string's end.
+        while(canShrink(s[start], target) || end != s.end()-s.begin()){
+            if(canShrink(s[start],target)){
+                if(target.find(s[start]) != target.end()){
+                    target.at(s[start])++;
+                }
+                start++;
+            }else{
+                if(target.find(s[end]) != target.end()){
+                    target[s[end]]--;
+                }
+                end++;
+            }
+            size = end-start;
+            if(size < minSize){
+                minSize = size;
+                minString = s.substr(start,minSize);
+            }
+        }
+        
+        return minString;
+    }
     //leetcode 4
     double findMedianSortedArrays(vector<int>& nums1, vector<int>& nums2) {
         //size_t median = (nums1.size()+nums2.size())/2;
@@ -197,6 +294,19 @@ public:
         
         return ret;
     }
+    //leet242
+    bool isAnagram(string s, string t){
+        int count1[256]={0};
+        int count2[256]={0};
+        for_each(s.begin(),s.end(),[&](char c){count1[c]++;});
+        for_each(s.begin(),s.end(),[&](char c){count2[c]++;});
+        for(int i=0;i<256;i++){
+            if(count1[i]!=count2[i])return false;
+        }
+        return true;
+    }
+    
+    
     //leet274,275
     template<class ForwardIt, class T, class Compare>
     ForwardIt my_upper_bound(ForwardIt first, ForwardIt last, const T& value,Compare comp)
@@ -216,6 +326,7 @@ public:
         }
         return first;
     }
+    
     int hIndex(vector<int>& citations) {
         //O(n)，降序时取i+1 <= citations[i]的最大值 h=i+1
 //        sort(citations.begin(),citations.end(),[](int a,int b){return a>b;});
@@ -230,7 +341,6 @@ public:
 //        return h;
         //O(logn)，升序时取N-i>=citations[i]的最大值 h=N-i
         sort(citations.begin(),citations.end(),[](int a,int b){return a<b;});
-
         int h=(int)citations.size();
         vector<int>::iterator iter = my_upper_bound(citations.begin(), citations.end(), h, [&h,&citations](int value,vector<int>::iterator it){
             int h = (it-citations.begin());
@@ -239,7 +349,7 @@ public:
         return (int)(citations.size()-(iter-citations.begin()));
     }
     
-
+    
     
 };
 
