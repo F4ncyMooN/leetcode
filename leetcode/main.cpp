@@ -17,6 +17,9 @@ int main(void)
 {
     vector<int> numbers;
     solution s;
+    s.myAtoi("    10522545459");
+    
+    
     numbers  = {0,1,2,4,5,7};
     s.summaryRanges(numbers);
     

@@ -21,6 +21,64 @@ using namespace std;
 
 class solution{
 public:
+    //leet 8
+    bool checkOverflow(int num, int digit){
+        if(num > 0){
+            if(num < INT_MAX/10)
+                return false;
+            else if(num == INT_MAX/10){
+                if(digit > INT_MAX - num*10)
+                    return true;
+            }else{
+                return true;
+            }
+        }else{
+            if(num > INT_MIN/10)
+                return false;
+            else if(num == INT_MIN/10){
+                if(digit > num*10 - INT_MIN)
+                    return true;
+            }else{
+                return true;
+            }
+        }
+        return false;
+    }
+    int myAtoi(string str) {
+        int sign = 1;
+        int num = 0;
+        //escape blanks
+        auto iter = str.begin();
+        while(*iter == ' '){iter++;}
+        
+        //check sign
+        if(*iter == '+'){
+            iter++;
+        }else if(*iter == '-'){
+            iter++;
+            sign = -1;
+        }
+        for(;iter != str.end();iter++){
+            if(*iter > '9' || *iter<'0')
+                return num;
+            if(checkOverflow(num,*iter-'0')){
+                if(num>0)
+                    return INT_MAX;
+                else
+                    return INT_MIN;
+            }
+            
+            
+            num = num>=0 ? num*10 + (*iter-'0'):num*10 - (*iter-'0');
+            
+            if(sign == -1 && num!=0){
+                num*=-1;
+                sign = 1;
+            }
+        }
+        return num;
+    }
+    
     //leet 228
     vector<string> summaryRanges(vector<int>& nums) {
         stringstream ss;
