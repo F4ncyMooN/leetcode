@@ -17,9 +17,9 @@ int main(void)
 {
     vector<int> numbers;
     solution s;
-    vector<int> zeros = {1,0,2,0,0,4,0};
-    s.moveZeroes(zeros);
-    s.myAtoi("    10522545459");
+    vector<int> nums1 = {1,2},nums2 = {1,1};
+    cout<<s.getExistNumber(nums1, 3)<<endl;
+    s.intersect(nums1, nums2);
     
     
     numbers  = {0,1,2,4,5,7};

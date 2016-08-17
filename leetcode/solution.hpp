@@ -21,7 +21,57 @@ using namespace std;
 
 class solution{
 public:
-    
+    //leet 350
+    int getExistNumber(const vector<int>& base, int num){
+        auto lower = lower_bound(base.begin(),base.end(),num);
+        auto upper = upper_bound(base.begin(),base.end(),num);
+        return upper - lower;
+    }
+    vector<int> intersect(vector<int>& nums1, vector<int>& nums2) {
+        sort(nums1.begin(),nums1.end());
+        sort(nums2.begin(),nums2.end());
+        vector<int>& base = nums2, &search = nums1;
+        vector<int> common;
+        int target = 0, number = 0, repeatition = 0;
+        if(nums1.size()>nums2.size()){
+            swap(base,search);
+        }
+        if(search.size() == 0)
+            return common;
+        target = *search.begin();
+        for(auto iter = search.begin();iter!=search.end();iter++){
+            if(target == *iter){
+                number++;
+            }else{
+                repeatition = min(number,getExistNumber(base,target));
+                for(int i = 0;i<repeatition;i++){
+                    common.push_back(target);
+                }
+                number = 1;
+                target = *iter;
+            }
+        }
+        repeatition = min(number,getExistNumber(base,target));
+        for(int i = 0;i<repeatition;i++){
+            common.push_back(target);
+        }
+        return common;
+    }
+    //leet 349
+    vector<int> intersection(vector<int>& nums1, vector<int>& nums2) {
+        vector<int> intersection;
+        auto end1 = unique(nums1.begin(), nums1.end());
+        auto end2 = unique(nums2.begin(), nums2.end());
+        sort(nums2.begin(), end2);
+        for(auto iter = nums1.begin();iter != end1;iter++){
+            auto position = find(nums2.begin(),end2,*iter);
+            if(position != end2){
+                intersection.push_back(*position);
+            }
+        }
+        
+        return intersection;
+    }
     //leet 283
     void moveZeroes(vector<int>& nums) {
         auto first_zero = nums.end();
