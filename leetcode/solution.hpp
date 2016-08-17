@@ -21,6 +21,40 @@ using namespace std;
 
 class solution{
 public:
+    
+    //leet 283
+    void moveZeroes(vector<int>& nums) {
+        auto first_zero = nums.end();
+        auto iter = nums.begin();
+        int zero_num = 0;
+        while(iter != nums.end()){
+            if(*iter == 0){
+                first_zero = iter;
+                iter++;
+                zero_num = 1;
+                break;
+            }
+            iter++;
+        }
+        
+        for(;iter!=nums.end();iter++){
+            if(*iter != 0){
+                *first_zero = *iter;
+                *iter = 0;
+                zero_num--;
+                if(zero_num == 0){
+                    first_zero = iter;
+                    zero_num = 1;
+                }else{
+                    first_zero++;
+                    zero_num++;
+                }
+            }else{
+                zero_num++;
+            }
+        }
+        
+    }
     //leet 8
     bool checkOverflow(int num, int digit){
         if(num > 0){

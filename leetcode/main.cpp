@@ -17,6 +17,8 @@ int main(void)
 {
     vector<int> numbers;
     solution s;
+    vector<int> zeros = {1,0,2,0,0,4,0};
+    s.moveZeroes(zeros);
     s.myAtoi("    10522545459");
     
     
