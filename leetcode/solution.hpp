@@ -41,13 +41,10 @@ public:
             if(*iter != 0){
                 *first_zero = *iter;
                 *iter = 0;
-                zero_num--;
-                if(zero_num == 0){
+                if(zero_num == 1){
                     first_zero = iter;
-                    zero_num = 1;
                 }else{
                     first_zero++;
-                    zero_num++;
                 }
             }else{
                 zero_num++;
