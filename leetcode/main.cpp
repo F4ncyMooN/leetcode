@@ -17,6 +17,12 @@ int main(void)
 {
     vector<int> numbers;
     solution s;
+    ListNode* a = new ListNode(3);
+    ListNode* b = new ListNode(2);
+    ListNode* c = new ListNode(1);
+    a->next = b;//b->next = c;
+    s.insertionSortList(a);
+    
     vector<int> nums1 = {1,2},nums2 = {1,1};
     cout<<s.getExistNumber(nums1, 3)<<endl;
     s.intersect(nums1, nums2);

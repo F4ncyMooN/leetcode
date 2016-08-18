@@ -18,9 +18,146 @@
 #include <sstream>
 #include <map>
 using namespace std;
+class ListNode{
+public:
+    int val;
+    ListNode *next;
+    ListNode(int x) : val(x), next(NULL) {}
+};
 
 class solution{
 public:
+    //leetcode 147
+    ListNode* insertionSortList(ListNode* head) {
+        if(head == NULL || head->next == NULL)return head;
+        ListNode *p = head, *number, *t;
+        ListNode node(-1);
+        while(p != NULL){
+            number = p;
+            p = p->next;
+            number->next = NULL;
+            t = &node;
+            while(t -> next != NULL && t->next->val < number->val){
+                t = t->next;
+            }
+            //insert
+            number->next = t->next;
+            t->next = number;
+        }
+        
+        return node.next;
+        
+    }
+    
+    //leetcode 148
+    ListNode* mergeTwoLists(ListNode* l1, ListNode* l2) {
+        if(l1 == NULL){return l2;}
+        if(l2 == NULL){return l1;}
+        ListNode* head, *p;
+        ListNode node(-1);
+        p = &node;
+        while(l1 != NULL && l2 != NULL){
+            if(l1->val < l2->val){
+                p->next = l1;
+                l1 = l1->next;
+            }else{
+                p->next = l2;
+                l2 = l2->next;
+            }
+            p = p->next;
+        }
+        if(l1 == NULL){p->next = l2;}
+        if(l2 == NULL){p->next = l1;}
+        return node.next;
+    }
+    ListNode* sortList(ListNode* head){
+        if(head == NULL || head->next == NULL){
+            return head;
+        }
+        ListNode *slow = head, *fast = head->next;
+        //slow = fast = head;
+        while(fast != NULL && fast->next != NULL){
+            fast = fast->next->next;
+            slow = slow->next;
+        }
+        fast = slow->next;
+        slow->next = NULL;
+        
+        slow = sortList(head);
+        fast = sortList(fast);
+        head = mergeTwoLists(slow, fast);
+        return head;
+    }
+    
+    /*使用快排进行链表排序会导致TLE。
+     快排快速的原因是数组排序时随机读取时击中cache的比例较高，同时mergesort需要开辟O(n)的数组进行存储
+     而在链表排序时快排的优点就变成了缺点。
+     */
+    ListNode* tail(ListNode* head){
+        if(head == NULL || head->next == NULL){
+            return head;
+        }
+        while (head->next!=NULL) {
+            head = head->next;
+        }
+        return head;
+    }
+    ListNode* sortList_qsort(ListNode* head) {
+        if(head == NULL || head->next == NULL){
+            return head;
+        }
+        ListNode *lower = NULL, *upper = NULL, *p = head->next, *pl, *pu;
+        //split the list into lower and upper parts.
+        while(p != NULL){
+            if(p->val < head->val){
+                if(lower == NULL){
+                    lower = p;
+                    pl = lower;
+                }else{
+                    pl->next = p;
+                    pl = p;
+                }
+            }else{
+                if(upper == NULL){
+                    upper = p;
+                    pu = upper;
+                }else{
+                    pu->next = p;
+                    pu = p;
+                }
+            }
+            p = p->next;
+        }
+        if(lower != NULL)
+            pl->next = NULL;
+        else
+            pl = NULL;
+        if(upper != NULL)
+            pu->next = NULL;
+        else
+            pu = NULL;
+        lower = sortList(lower);
+        upper = sortList(upper);
+        pl = tail(lower);
+        pu = tail(upper);
+        
+        if(lower != NULL && upper != NULL){
+            pl->next = head;
+            head->next = upper;
+        }else if(lower == NULL){
+            lower = head;
+            lower->next = upper;
+        }else if(upper == NULL){
+            pl->next = head;
+            head->next = NULL;
+        }else{
+            lower = head;
+        }
+        
+        
+        return lower;
+    }
+    
     //leet 350
     int getExistNumber(const vector<int>& base, int num){
         auto lower = lower_bound(base.begin(),base.end(),num);
