@@ -15,8 +15,15 @@ using namespace std;
 
 int main(void)
 {
+    string str("hello");
+    cout<<str<<endl;
     vector<int> numbers;
     solution s;
+    
+    s.reverseVowels(str);
+    
+    s.compareVersion("1.0.1", "1");
+    
     ListNode* a = new ListNode(3);
     ListNode* b = new ListNode(2);
     ListNode* c = new ListNode(1);

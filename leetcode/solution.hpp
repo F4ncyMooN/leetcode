@@ -27,6 +27,53 @@ public:
 
 class solution{
 public:
+    //leetcode 345
+    bool isVowel(char c){
+        c = tolower(c);
+        return c == 'a' || c == 'e' || c == 'i' || c == 'o' || c == 'u';
+    }
+    string reverseVowels(string s) {
+        int i = 0,j = s.size()-1;
+        do{
+            while(! isVowel(s[i])){i++;}
+            while(! isVowel(s[j])){j--;}
+            if(i>=j)return s;
+            swap(s[i],s[j]);
+            i++;j--;
+        }while(i<j);
+        return s;
+    }
+    //leetcode 165
+    void split(vector<int>& v,string version){
+        size_t seperator;
+        while(!version.empty()){
+            seperator = version.find('.');
+            if(seperator == version.npos){
+                v.push_back(atoi(version.c_str()));
+                version.clear();
+            }else{
+                v.push_back(atoi(version.substr(0,seperator).c_str()));
+                version = version.substr(seperator+1);
+            }
+        }
+    }
+    int compareVersion(string version1, string version2) {
+        vector<int> v1,v2;
+        int a,b;
+        split(v1,version1);split(v2, version2);
+        for(int i=0;i<max(v1.size(),v2.size());i++){
+            if(i >= v1.size()){
+                a = 0; b = v2[i];
+            }else if(i >= v2.size()){
+                b = 0; a = v1[i];
+            }else{
+                a = v1[i];b = v2[i];
+            }
+            if(a != b)
+                return a<b?-1:1;
+        }
+        return 0;
+    }
     //leetcode 147
     ListNode* insertionSortList(ListNode* head) {
         if(head == NULL || head->next == NULL)return head;
