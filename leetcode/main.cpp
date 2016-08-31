@@ -17,8 +17,16 @@ int main(void)
 {
     string str("hello");
     cout<<str<<endl;
-    vector<int> numbers;
+    vector<int> numbers = {1};
     solution s;
+    
+    cout<<s.f1(31)<<endl;
+    
+    s.generate(5);
+    
+    s.removeElement(numbers, 1);
+    
+    s.isPowerOfFour(16);
     
     s.reverseVowels(str);
     
@@ -27,7 +35,11 @@ int main(void)
     ListNode* a = new ListNode(3);
     ListNode* b = new ListNode(2);
     ListNode* c = new ListNode(1);
-    a->next = b;//b->next = c;
+    ListNode* d = new ListNode(0);
+    
+    a->next = b;b->next = c;c->next = d;
+    s.reverseKGroup(a, 3);
+    
     s.insertionSortList(a);
     
     vector<int> nums1 = {1,2},nums2 = {1,1};

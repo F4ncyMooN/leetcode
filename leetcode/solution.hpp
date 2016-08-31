@@ -12,6 +12,8 @@
 #include <stdio.h>
 #include <vector>
 #include <queue>
+#include <bitset>
+#include <set>
 #include <string>
 #include <stdlib.h>
 #include <algorithm>
@@ -27,6 +29,105 @@ public:
 
 class solution{
 public:
+    //leetcode 338
+    int f1(unsigned x)
+    {
+        int n=1;
+        if(x==0) return -1;
+        if ((x>>16) == 0) {n = n+16; x = x<<16;}
+        if ((x>>24) == 0) {n = n+8; x = x<<8;}
+        if ((x>>28) == 0) {n = n+4; x = x<<4;}
+        if ((x>>30) == 0) {n = n+2; x = x<<2;}
+        n = n-(x>>31);
+        return 31-n;    
+    }
+    
+    
+    //leetcode 118
+    vector<vector<int>> generate(int numRows) {
+        string("13");
+        vector<vector<int>> triangle(numRows,vector<int>());
+        if(numRows == 0)return triangle;
+        triangle[0].push_back(1);
+        for(int i=1;i<numRows;i++){
+            vector<int> &row = triangle[i];
+            row.push_back(1);
+            for(int j = 0;j<triangle[i-1].size()-1;j++){
+                row.push_back(triangle[i-1][j] + triangle[i-1][j+1]);
+            }
+            row.push_back(1);
+        }
+        return triangle;
+    }
+    //leetcode 27
+    int removeElement(vector<int>& nums, int val) {
+        vector<vector<int>> tri(5,vector<int>());
+        if(nums.size() == 0)return 0;
+        int i = 0,j = nums.size()-1;
+        while(i<j){
+            if(val == nums[i]){
+                swap(nums[i],nums[j--]);
+            }else{
+                i++;
+            }
+        }
+        if(nums[i] == val)i--;
+        nums.erase(nums.begin()+i+1,nums.end());
+        return nums.size();
+    }
+    //leetcode 342
+    bool isPowerOfFour(int num) {
+        if(num <= 0)return false;
+        bitset<32> bits(num);
+        if(bits.count() != 1){return false;}
+        else{
+            bits = num&0x55555555;
+            return bits.count() == 1;
+        }
+    }
+    //leetcode 25
+    ListNode* addList(ListNode *tail,ListNode *start,ListNode *end,bool hasKnodes){
+        set<int> aaa;
+        if(hasKnodes){
+            ListNode* p = start, *node;
+            while(p != end){
+                node = p;
+                p = p->next;
+                node->next = tail->next;
+                tail->next = node;
+            }
+            p->next = tail->next;
+            tail->next = p;
+            return start;
+        }else{
+            tail->next = start;
+            end->next = NULL;
+            return end;
+        }
+    }
+    ListNode* reverseKGroup(ListNode* head, int k) {
+        if(head == NULL || head->next == NULL || k ==1)return head;
+        bool hasKnodes = false;
+        ListNode node(-1);
+        ListNode *p = head, *tail = &node, *start = head, *end = head;
+        while(p != NULL){
+            hasKnodes = true;
+            start = p;
+            for(int i=0;i<k-1;i++){
+                if(p->next == NULL){
+                    end = p;
+                    hasKnodes = false;
+                    break;
+                }
+                p = p->next;
+            }
+            if(hasKnodes)end = p;
+            p = p->next;
+            tail = addList(tail,start,end,hasKnodes);
+        }
+        return node.next;
+    }
+    
     //leetcode 345
     bool isVowel(char c){
         c = tolower(c);
