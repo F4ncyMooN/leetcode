@@ -41,7 +41,15 @@ public:
         n = n-(x>>31);
         return 31-n;    
     }
-    
+    vector<int> countBits(int num) {
+        if(num == 0)return vector<int>(1,0);
+        vector<int> counts(num+1,0);
+        counts[0] = 0;counts[1] = 1;
+        for(int i = 2; i <= num; i++){
+            counts[i] = counts[i-(1<<f1(i))] + 1;
+        }
+        return counts;
+    }
     
     //leetcode 118
     vector<vector<int>> generate(int numRows) {
